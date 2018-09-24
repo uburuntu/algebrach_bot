@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 
-
 bot_default = ''
 bot = os.getenv('ALGEBRACH_BOT_TOKEN_TELEGRAM', bot_default)
 bot_test = os.getenv('ALGEBRACH_BOT_TOKEN_TEST_TELEGRAM', bot_default)
@@ -14,7 +13,6 @@ wolfram = os.getenv('ALGEBRACH_BOT_TOKEN_WOLFRAM', wolfram_default)
 
 fb_default = ''
 fb = os.getenv('ALGEBRACH_BOT_TOKEN_FACEBOOK', fb_default)
-
 
 socks5_url_default = ''
 socks5_url = os.getenv('ALGEBRACH_BOT_SOCKS5_URL', socks5_url_default)

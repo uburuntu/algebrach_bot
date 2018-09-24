@@ -133,4 +133,3 @@ if __name__ == '__main__':
     dp.loop.create_task(morning_message.schedule_morning_messages())
     dp.loop.create_task(vk_check.schedule_vk(dp))
     executor.start_polling(dp, skip_updates=True)
-

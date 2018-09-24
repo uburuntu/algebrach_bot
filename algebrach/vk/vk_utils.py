@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+# /usr/bin/env python3
 import logging
 import re
 
@@ -21,7 +21,6 @@ class VkPost():
         self.fb_link = ''  # required link for FB's post
         self.session = session_in  # our aiohttp client session
 
-
     async def post_prepare(self):
         # Prepares the text portion of the post
         post_preheader = ''
@@ -31,14 +30,15 @@ class VkPost():
         attachments_tg = ''
         attachments_fb = ''
         self.fb_link = 'https://vk.com/wall{0}_{1}'.format(self.post['from_id'], self.post['id'])
-        
+
         # print(self.post)
 
         # Checks if the post is a repost
         if 'copy_history' in self.post:
             post_preheader = self.post['text']
-            post_tg_header = '<a href="https://vk.com/wall{0}_{1}">Репост</a> '.format(self.post['from_id'], self.post['id'])
-            post_fb_header =  'Репост '
+            post_tg_header = '<a href="https://vk.com/wall{0}_{1}">Репост</a> '.format(self.post['from_id'],
+                                                                                       self.post['id'])
+            post_fb_header = 'Репост '
             self.is_repost = True
             self.post = self.post['copy_history'][0]
 
@@ -47,30 +47,35 @@ class VkPost():
         # Updates headers respectively
         if self.post['owner_id'] < 0:
             query_groups_getbyid = 'https://api.vk.com/method/groups.getById?access_token={0}&group_ids={1}&v={2}'.format(
-                tokens.vk, -self.post['owner_id'], config.vk_ver)
+                    tokens.vk, -self.post['owner_id'], config.vk_ver)
             async with self.session.get(query_groups_getbyid) as response:
                 op_name = (await response.json())['response'][0]['name']
                 op_screenname = (await response.json())['response'][0]['screen_name']
             post_tg_header += 'из группы <a href="https://vk.com/{0}">{1}</a>:'.format(op_screenname, op_name)
             post_fb_header += 'из группы {0} (https://vk.com/{1}):'.format(op_name, op_screenname)
         else:
-            query_usersget = 'https://api.vk.com/method/users.get?access_token={0}&user_id={1}&v={2}'.format(tokens.vk, self.post['owner_id'], config.vk_ver)
+            query_usersget = 'https://api.vk.com/method/users.get?access_token={0}&user_id={1}&v={2}'.format(tokens.vk,
+                                                                                                             self.post[
+                                                                                                                 'owner_id'],
+                                                                                                             config.vk_ver)
             async with self.session.get(query_usersget) as response:
                 op_name = '{0} {1}'.format((await response.json())['response'][0]['first_name'],
-                                        (await response.json())['response'][0]['last_name'])
+                                           (await response.json())['response'][0]['last_name'])
                 op_screenname = (await response.json())['response'][0]['id']
             post_tg_header += 'пользователя <a href="https://vk.com/id{0}">{1}</a>:'.format(op_screenname, op_name)
             post_fb_header += 'пользователя {0} (https://vk.com/id{1}):'.format(op_name, op_screenname)
 
         # Gets main body of the post's text
         post_body = self.post['text']
-    
+
         # If the posts contains any attachments, calls attach_prepare() to extract all of them
         if 'attachments' in self.post:
             attachments_tg, attachments_fb = self.attach_prepare()
 
         # Inserts an emoji-link depending on self.is_repost
-        post_tg_header = '<a href="{0}">📢</a>'.format(self.link_preview)+post_tg_header if self.is_repost else '<a href="{0}">📋</a>'.format(self.link_preview)+post_tg_header
+        post_tg_header = '<a href="{0}">📢</a>'.format(
+            self.link_preview) + post_tg_header if self.is_repost else '<a href="{0}">📋</a>'.format(
+            self.link_preview) + post_tg_header
 
         # Replaces wiki-links for TG message and FB post respectively
         post_tg_preheader = self.replace_wikis(post_preheader)
@@ -79,9 +84,10 @@ class VkPost():
         post_fb_body = self.replace_wikis(post_body, True)
 
         # Final text part for TG and FB
-        self.post_tg_text = '{0}\n\n{1}\n{2}\n{3}'.format(post_tg_preheader, post_tg_header, post_tg_body, attachments_tg)
-        self.post_fb_text = '{0}\n\n{1}\n{2}\n{3}'.format(post_fb_preheader, post_fb_header, post_fb_body, attachments_fb)
-
+        self.post_tg_text = '{0}\n\n{1}\n{2}\n{3}'.format(post_tg_preheader, post_tg_header, post_tg_body,
+                                                          attachments_tg)
+        self.post_fb_text = '{0}\n\n{1}\n{2}\n{3}'.format(post_fb_preheader, post_fb_header, post_fb_body,
+                                                          attachments_fb)
 
     def attach_prepare(self):
         '''
@@ -147,7 +153,7 @@ class VkPost():
                         attach_tg_docs = attach_fb_docs = self.attach_naming(attach_tg_docs, '\n— Приложения:')
                         doc_url = attachment['doc']['url']
                         doc_title = attachment['doc']['title']
-                        doc_size = ((int(attachment['doc']['size']))/1024)/1024
+                        doc_size = ((int(attachment['doc']['size'])) / 1024) / 1024
                         attach_tg_docs += '<a href="{0}">{1}</a>  ({2:.2f} Мб)\n'.format(doc_url, doc_title, doc_size)
                         attach_fb_docs += '{0}: {1}  ({2:.2f} Мб)\n'.format(doc_title, doc_url, doc_size)
                         logging.info('Successfully extracted an URL (DOC)')
@@ -175,7 +181,8 @@ class VkPost():
                     poll_question = attachment['poll']['question']
                     poll_answers = ''
                     for answer in attachment['poll']['answers']:
-                        poll_answers += '{0} - проголосовало {1}  ({2}%)\n'.format(answer['text'], answer['votes'], answer['rate'])
+                        poll_answers += '{0} - проголосовало {1}  ({2}%)\n'.format(answer['text'], answer['votes'],
+                                                                                   answer['rate'])
                     attach_tg_polls += '{0}\n{1}\n'.format(poll_question, poll_answers)
                     attach_fb_polls += '{0}\n{1}\n'.format(poll_question, poll_answers)
                     logging.info('Successfully extracted a poll')
@@ -206,10 +213,9 @@ class VkPost():
         except KeyError:
             logging.info('KeyError while scanning VK Post\'s attachments')
 
-        tg = attach_tg_albums+attach_tg_audios+attach_tg_docs+attach_tg_links+attach_tg_notes+attach_tg_pages+attach_tg_polls+attach_tg_videos
-        fb = attach_fb_albums+attach_fb_audios+attach_fb_docs+attach_fb_links+attach_fb_notes+attach_fb_pages+attach_fb_polls+attach_fb_videos
+        tg = attach_tg_albums + attach_tg_audios + attach_tg_docs + attach_tg_links + attach_tg_notes + attach_tg_pages + attach_tg_polls + attach_tg_videos
+        fb = attach_fb_albums + attach_fb_audios + attach_fb_docs + attach_fb_links + attach_fb_notes + attach_fb_pages + attach_fb_polls + attach_fb_videos
         return tg, fb
-
 
     def attach_naming(self, attach_string, name):
         '''
@@ -219,7 +225,6 @@ class VkPost():
         if attach_string == '':
             attach_string = '{0}\n'.format(name)
         return attach_string
-
 
     def replace_wikis(self, text, raw_link=False):
         '''

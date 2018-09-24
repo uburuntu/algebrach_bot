@@ -109,7 +109,7 @@ async def my_kek(message: types.Message):
                             'счётчик благополучно сбросится.'.format(config.limit_kek - my_kek.kek_counter,
                                                                      time_remaining[0], time_remaining[1]),
                             parse_mode='HTML')
-    if my_kek.kek_counter == config.limit_kek-1:
+    if my_kek.kek_counter == config.limit_kek - 1:
         time_remaining = divmod(int(my_kek.kek_crunch) - int(time.time()), 60)
         # TODO: fix this notification
         await message.reply('<b>EL-FIN!</b>\nТеперь вы сможете кекать только через {0} мин. {1} сек.'

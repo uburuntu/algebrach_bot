@@ -21,10 +21,10 @@ async def my_d6(message):
                 dice = int(message.text.split()[1])
             except ValueError:
                 await message.reply(
-                                "Не понял число костей. "
-                                "Пожалуйста, введи команду "
-                                "в виде \'/d6 <int>\', "
-                                "где <int> — целое от 1 до 10.")
+                        "Не понял число костей. "
+                        "Пожалуйста, введи команду "
+                        "в виде \'/d6 <int>\', "
+                        "где <int> — целое от 1 до 10.")
                 return
     if 0 < dice <= 10:
         max_result = dice * 6
@@ -67,7 +67,7 @@ async def my_dn(message):
                             "knew about /dn and got that output: {0}".format(symbols))
         else:
             message.reply("Слишком большие числа. "
-                            "Попробуй что-нибудь поменьше")
+                          "Попробуй что-нибудь поменьше")
             user_action_log(message, "knew about /dn "
                                      "and the answer was too long "
                                      "to fit one message")

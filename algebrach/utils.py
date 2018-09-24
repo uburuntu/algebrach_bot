@@ -22,6 +22,7 @@ scheduler.start()
 async def bot_name(bot):
     return (await bot.me).username
 
+
 loop = asyncio.get_event_loop()
 my_bot_name = loop.run_until_complete(bot_name(my_bot))
 

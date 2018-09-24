@@ -34,7 +34,6 @@ if len(sys.argv) == 2:
         mm_fb_album = '300582960439551'
         bot_token = tokens.bot_test
 
-
 data_dir = 'data/'
 kek_dir = data_dir + 'kek/'
 text_dir = data_dir + 'text/'
@@ -47,21 +46,21 @@ dump_dir = gen_dir + 'dump/'
 
 # Пути к файлам
 file_location = {
-    '/kek': text_dir + 'DataKek.txt',
-    '/help': text_dir + 'DataHelp.txt',
-    '/wifi': text_dir + 'DataWifi.txt',
-    '/chats': text_dir + 'DataChats.txt',
-    '/links': text_dir + 'DataLinks.txt',
-    '/rules': text_dir + 'DataRules.txt',
-    '/start': text_dir + 'DataStart.txt',
-    '/gender': text_dir + 'DataGender.txt',
-    '/channels': text_dir + 'DataChannels.txt',
+    '/kek'        : text_dir + 'DataKek.txt',
+    '/help'       : text_dir + 'DataHelp.txt',
+    '/wifi'       : text_dir + 'DataWifi.txt',
+    '/chats'      : text_dir + 'DataChats.txt',
+    '/links'      : text_dir + 'DataLinks.txt',
+    '/rules'      : text_dir + 'DataRules.txt',
+    '/start'      : text_dir + 'DataStart.txt',
+    '/gender'     : text_dir + 'DataGender.txt',
+    '/channels'   : text_dir + 'DataChannels.txt',
     'kek_file_ids': text_dir + 'DataKek_IDs.txt',
-    'chromo': gen_dir + 'chromo_count.txt',
-    'bot_logs': gen_dir + 'bot_logs.txt',
-    'last_post': gen_dir + 'last_post.txt',
-    'vk_config': gen_dir + 'vk_config.json',
-    'bot_killed': gen_dir + 'they_killed_me.txt',
+    'chromo'      : gen_dir + 'chromo_count.txt',
+    'bot_logs'    : gen_dir + 'bot_logs.txt',
+    'last_post'   : gen_dir + 'last_post.txt',
+    'vk_config'   : gen_dir + 'vk_config.json',
+    'bot_killed'  : gen_dir + 'they_killed_me.txt',
     'vk_last_post': gen_dir + 'vk_last_post.txt',
     'kek_requests': gen_dir + 'kek_requests.txt'
 }

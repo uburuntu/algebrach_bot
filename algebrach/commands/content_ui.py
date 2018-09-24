@@ -10,7 +10,7 @@ from algebrach.data.models import GifResponse, ImageResponse, ManageMessageModel
 from algebrach.utils import create_collage, divide_text, error_log, my_bot
 
 CALLBACK_MODELS_DICT = {'text': TextResponse, 'image': ImageResponse,
-                        'gif': GifResponse, 'sticker': StickerResponse}
+                        'gif' : GifResponse, 'sticker': StickerResponse}
 
 
 async def init_ui(message: types.Message):
@@ -20,7 +20,7 @@ async def init_ui(message: types.Message):
     UiMessage.get_or_create(chat_id=chat_id, message_id=message_id, state='init')
 
     inline_keyboard = types.InlineKeyboardMarkup()
-    inline_keyboard.add(*[types.InlineKeyboardButton(btn_text, callback_data='ui:'+btn_text.lower())
+    inline_keyboard.add(*[types.InlineKeyboardButton(btn_text, callback_data='ui:' + btn_text.lower())
                           for btn_text in ['Text', 'Image', 'Sticker', 'Gif']])
 
     await message.reply("Выберите категорию:", reply_markup=inline_keyboard)
@@ -62,15 +62,15 @@ async def render_page(ui_message, chat_id):
                             types.InlineKeyboardButton("Назад️", callback_data='ui:back'),
                             types.InlineKeyboardButton("▶️️", callback_data='ui:+'))
 
-        btn_count = int(ceil(query.count()/PAGINATION_LIMIT))
-        inline_keyboard.add(*[types.InlineKeyboardButton(str(x+1), callback_data='ui:'+str(x+1))
-                            for x in range(btn_count)])
+        btn_count = int(ceil(query.count() / PAGINATION_LIMIT))
+        inline_keyboard.add(*[types.InlineKeyboardButton(str(x + 1), callback_data='ui:' + str(x + 1))
+                              for x in range(btn_count)])
 
         ui_text = f"Количество записей в базе: {query.count()}\n\n"
 
         if response_class == 'text':
             ui_text += '\n'.join(
-                (f"{i+1}. [{resp.id}] | {resp.content}" for i, resp in enumerate(responses))
+                    (f"{i+1}. [{resp.id}] | {resp.content}" for i, resp in enumerate(responses))
             )
 
             if len(ui_text) > 4096:
@@ -98,11 +98,11 @@ async def render_page(ui_message, chat_id):
             ui_text += f'Страница: {ui_message.page}'
 
             ManageMessageModel.create(
-                type='image',
-                chat_id=photo_msg.chat.id,
-                message_id=photo_msg.message_id,
-                response_class=response_class,
-                response_type=response_type
+                    type='image',
+                    chat_id=photo_msg.chat.id,
+                    message_id=photo_msg.message_id,
+                    response_class=response_class,
+                    response_type=response_type
             )
 
             await my_bot.edit_message_text(ui_text, chat_id, ui_message.message_id, reply_markup=inline_keyboard)
@@ -118,18 +118,18 @@ async def render_page(ui_message, chat_id):
             ui_text += f'Страница: {ui_message.page}'
 
             ManageMessageModel.create(
-                type='sticker',
-                chat_id=photo_msg.chat.id,
-                message_id=photo_msg.message_id,
-                response_class=response_class,
-                response_type=response_type
+                    type='sticker',
+                    chat_id=photo_msg.chat.id,
+                    message_id=photo_msg.message_id,
+                    response_class=response_class,
+                    response_type=response_type
             )
 
             await my_bot.edit_message_text(ui_text, chat_id, ui_message.message_id, reply_markup=inline_keyboard)
 
         elif response_class == 'gif':
             ui_text += '\n'.join(
-                f"{i+1}. [{resp.id}] | {int(len(resp.content)/1024)} Kb" for i, resp in enumerate(responses)
+                    f"{i+1}. [{resp.id}] | {int(len(resp.content)/1024)} Kb" for i, resp in enumerate(responses)
             )
             ui_text += "\n\nИзвините, но просмотр недоступен. Только добавление или удаление"
             await my_bot.edit_message_text(ui_text, chat_id, ui_message.message_id, reply_markup=inline_keyboard)
@@ -228,15 +228,15 @@ async def process_ui_callback(callback_query: types.CallbackQuery):
             state_args = ui_message.state.split(':')
             if len(state_args) == 2:
                 response_class, response_type = state_args
-                msg = await my_bot.send_message(ui_message.chat_id, "В ответ на это сообщение пришлите то, " 
+                msg = await my_bot.send_message(ui_message.chat_id, "В ответ на это сообщение пришлите то, "
                                                                     "что хотите добавить:")
 
                 ManageMessageModel.create(
-                    type='add',
-                    chat_id=msg.chat.id,
-                    message_id=msg.message_id,
-                    response_class=response_class,
-                    response_type=response_type
+                        type='add',
+                        chat_id=msg.chat.id,
+                        message_id=msg.message_id,
+                        response_class=response_class,
+                        response_type=response_type
                 )
 
         elif cmd == 'delete':
@@ -248,11 +248,11 @@ async def process_ui_callback(callback_query: types.CallbackQuery):
                                                                     "(в квадратных скобках):")
 
                 ManageMessageModel.create(
-                    type='delete',
-                    chat_id=msg.chat.id,
-                    message_id=msg.message_id,
-                    response_class=response_class,
-                    response_type=response_type
+                        type='delete',
+                        chat_id=msg.chat.id,
+                        message_id=msg.message_id,
+                        response_class=response_class,
+                        response_type=response_type
                 )
 
 
@@ -327,4 +327,3 @@ async def add_message(message: types.Message):
                 await my_bot.edit_message_text('Вы рагуль, ибо id не валидный.', chat_id=chat_id,
                                                message_id=add_message_id)
             msg.delete_instance()
-

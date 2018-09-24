@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+# /usr/bin/env python3
 import asyncio
 import logging
 
@@ -17,7 +17,7 @@ async def vk_check(session, vkgroup_id, date_last_post):
         # Get 2 (1st may be pinned) last posts
         # TODO: organize the query stings
         query_wall_get = 'https://api.vk.com/method/wall.get?access_token={0}&owner_id={1}&count={2}&offset={3}&v={4}'.format(
-                            tokens.vk, vkgroup_id, 2, 0, config.vk_ver)
+                tokens.vk, vkgroup_id, 2, 0, config.vk_ver)
         async with session.get(query_wall_get) as response:
             # Create a json object
             posts = (await response.json())['response']['items']
@@ -36,7 +36,8 @@ async def vk_check(session, vkgroup_id, date_last_post):
     except KeyError as ex:
         if (await response.json()['error']['error_code']) == 5:
             # Alert the admins about an invalid token
-            await my_bot.send_message(mm_chat_debug, 'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
+            await my_bot.send_message(mm_chat_debug,
+                                      'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
             action_log('KeyError exception. Most likely there\'s invalid token.')
         return 0
 
@@ -69,23 +70,23 @@ async def vk_prepare(session, post):
     # Updating post_head respectively
     if post['owner_id'] < 0:
         query_groups_getbyid = 'https://api.vk.com/method/groups.getById?access_token={0}&group_ids={1}&v={2}'.format(
-                                tokens.vk, -post['owner_id'], config.vk_ver)
+                tokens.vk, -post['owner_id'], config.vk_ver)
         async with session.get(query_groups_getbyid) as response:
             op_name = (await response.json())['response'][0]['name']
             op_screenname = (await response.json())['response'][0]['screen_name']
         post_head += 'из группы <a href="https://vk.com/{0}">{1}</a>:'.format(op_screenname, op_name)
     else:
         query_usersget = 'https://api.vk.com/method/users.get?access_token={0}&user_id={1}&v={2}'.format(
-            tokens.vk, post['owner_id'], config.vk_ver)
-        async with session,get(query_usersget) as response:
+                tokens.vk, post['owner_id'], config.vk_ver)
+        async with session, get(query_usersget) as response:
             op_name = '{0} {1}'.format((await response.json())['response'][0]['first_name'],
-                                        (await response.json())['response'][0]['last_name'])
+                                       (await response.json())['response'][0]['last_name'])
             op_screenname = (await response.json())['response'][0]['id']
         post_head += 'пользователя <a href="https://vk.com/id{0}">{1}</a>'.format(op_screenname, op_name)
 
     # Get the text part of the post
     post_body = post['text']
-    
+
     # If the posts contains any attachments, we need to extract all of them
     if 'attachments' in post:
         # Call an extractor function
@@ -93,8 +94,7 @@ async def vk_prepare(session, post):
         post_attach = post_attach_list[0]
         urls_photo = post_attach_list[1]
         urls_gif = post_attach_list[2]
-        
-    
+
     post_complete = '{0}{1}\n{2}\n\n{3}'.format(post_hair, post_head, post_body, post_attach)
 
     return [post_complete, urls_photo, urls_gif]
@@ -116,7 +116,7 @@ async def vk_attachments(post, post_attach, urls_photo, urls_gif):
                         urls_photo.append(attach_url)
                         logging.info('Successfully extracted an URL (Photo)')
                         break
-            
+
             # If an attachment is a link.
             # Add it to post_attach, so it may be posted as HTML
             elif attachment['type'] == 'link':
@@ -162,7 +162,7 @@ async def vk_main(dp):
         # If it returns default then quit vk_main()
         if post_new == 0:
             return
-        
+
         # Else get data for different types of bot send
         post_text = post_new[0]
         post_imgs = post_new[1]
@@ -181,7 +181,6 @@ async def vk_main(dp):
             async with session.get(url) as response:
                 gif = await response.content.read()
             await my_bot.send_document(config.mm_chat, ('File.gif', gif))
-
 
 
 async def schedule_vk(dp):

@@ -38,7 +38,7 @@ async def wolfram_solver(message):
         # если всё плохо
         else:
             await message.reply("Запрос не найдён.\nЕсли ты ввёл его на русском, "
-                            "то попробуй ввести его на английском.")
+                                "то попробуй ввести его на английском.")
             user_action_log(message, "didn't received any data")
     # если пользователь вызвал /wolfram без аргумента
     else:

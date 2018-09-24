@@ -1,4 +1,4 @@
-#/usr/bin/env python3
+# /usr/bin/env python3
 import asyncio
 import logging
 
@@ -36,7 +36,7 @@ async def vk_check(session, vkgroup_id, date_last_post, count):
         # Gets 2 (1st may be pinned) last posts
         # TODO: organize the query stings
         query_wall_get = 'https://api.vk.com/method/wall.get?access_token={0}&owner_id={1}&count={2}&offset={3}&v={4}'.format(
-                            tokens.vk, vkgroup_id, count, offset, config.vk_ver)
+                tokens.vk, vkgroup_id, count, offset, config.vk_ver)
         async with session.get(query_wall_get) as response:
             # Creates a json object
             posts = (await response.json())['response']['items']
@@ -73,7 +73,8 @@ async def vk_check(session, vkgroup_id, date_last_post, count):
     except KeyError as ex:
         if (await response.json()['error']['error_code']) == 5:
             # Alert the admins about an invalid token
-            await my_bot.send_message(mm_chat_debug, 'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
+            await my_bot.send_message(mm_chat_debug,
+                                      'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
             action_log('KeyError exception. Most likely there\'s invalid token.')
         return 0
 
@@ -127,16 +128,15 @@ async def send_fb(session, text, images, gifs, link):
 
     if len(gifs) > 0:
         status = api.put_object(
-            parent_object='me', connection_name='feed',
-            message=text,
-            link=gifs[0])
+                parent_object='me', connection_name='feed',
+                message=text,
+                link=gifs[0])
 
     else:
         status = api.put_object(
-            parent_object='me', connection_name='feed',
-            message=text,
-            link=link)
-
+                parent_object='me', connection_name='feed',
+                message=text,
+                link=link)
 
 
 async def vk_main(dp):
@@ -159,7 +159,7 @@ async def vk_main(dp):
         # If it returns default then quit vk_main()
         if post_new == None:
             return
-        
+
         # Else, gets data for different types of bot send and reposts it to TG and FB
         post_tg_text, post_fb_text, disable_wp, post_images, post_gifs, fb_link = post_new
 

@@ -10,7 +10,7 @@ import arxiv
 import pytz
 import requests
 
-from utils import user_action_log, action_log
+from algebrach.utils import action_log, user_action_log
 
 
 async def arxiv_checker(message):

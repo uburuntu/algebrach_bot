@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
+import asyncio
 import datetime
 import random
-import asyncio
 
 import bs4
 import pytz
 import requests
 
-import config
-from utils import my_bot, action_log
+from algebrach import config
+from algebrach.utils import action_log, my_bot
 
 
 def daily_weather():

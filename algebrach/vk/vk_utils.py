@@ -1,11 +1,8 @@
 #/usr/bin/env python3
-import aiohttp
-import asyncio
 import logging
 import re
 
-import config
-import tokens
+from algebrach import config, tokens
 
 
 class VkPost():
@@ -49,7 +46,8 @@ class VkPost():
         # if          > 0 -- by a user
         # Updates headers respectively
         if self.post['owner_id'] < 0:
-            query_groups_getbyid = 'https://api.vk.com/method/groups.getById?access_token={0}&group_ids={1}&v={2}'.format(tokens.vk, -self.post['owner_id'], config.vk_ver)
+            query_groups_getbyid = 'https://api.vk.com/method/groups.getById?access_token={0}&group_ids={1}&v={2}'.format(
+                tokens.vk, -self.post['owner_id'], config.vk_ver)
             async with self.session.get(query_groups_getbyid) as response:
                 op_name = (await response.json())['response'][0]['name']
                 op_screenname = (await response.json())['response'][0]['screen_name']

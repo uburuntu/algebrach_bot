@@ -5,7 +5,7 @@ import random
 import wikipedia
 from langdetect import detect
 
-from utils import user_action_log
+from algebrach.utils import user_action_log
 
 
 async def my_wiki(message):

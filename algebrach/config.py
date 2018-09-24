@@ -3,8 +3,7 @@ import sys
 
 import aiosocksy
 
-import tokens
-
+from algebrach import tokens
 
 # Чат мехмата
 mm_chat = '-1001091546301'
@@ -43,7 +42,7 @@ task_dir = data_dir + 'task/'
 math_dir = data_dir + 'maths/'
 prize_dir = data_dir + 'anime/'
 
-gen_dir = 'gen/'
+gen_dir = 'generated/'
 dump_dir = gen_dir + 'dump/'
 
 # Пути к файлам

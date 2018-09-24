@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
 
-from utils import user_action_log
+from algebrach.utils import user_action_log
 
 
 # Команда /me

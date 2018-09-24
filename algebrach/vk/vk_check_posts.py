@@ -1,11 +1,11 @@
 #/usr/bin/env python3
-import aiohttp
 import asyncio
 import logging
 
-import config
-import tokens
-from utils import my_bot, action_log
+import aiohttp
+
+from algebrach import config, tokens
+from algebrach.utils import action_log, my_bot
 
 
 # Checks for updates and calls vk_prepare() once there are
@@ -170,7 +170,7 @@ async def vk_main(dp):
 
         # Send the text portion of the post
         await my_bot.send_message(config.mm_chat, post_text, parse_mode='HTML',
-                                     disable_web_page_preview=True)
+                                  disable_web_page_preview=True)
 
         # Send all images and GIFs found in the attachments
         for url in post_imgs:

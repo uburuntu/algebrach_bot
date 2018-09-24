@@ -1,14 +1,13 @@
 import asyncio
 from math import ceil
 
-from utils import my_bot, divide_text, error_log, create_collage
-from models import UiMessage, ManageMessageModel, TextResponse, ImageResponse, \
-    GifResponse, StickerResponse
-from config import PAGINATION_LIMIT
-
 from aiogram import types
 from peewee import DoesNotExist
 
+from algebrach.config import PAGINATION_LIMIT
+from algebrach.data.models import GifResponse, ImageResponse, ManageMessageModel, StickerResponse, TextResponse, \
+    UiMessage
+from algebrach.utils import create_collage, divide_text, error_log, my_bot
 
 CALLBACK_MODELS_DICT = {'text': TextResponse, 'image': ImageResponse,
                         'gif': GifResponse, 'sticker': StickerResponse}

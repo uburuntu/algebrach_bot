@@ -1,15 +1,14 @@
 #/usr/bin/env python3
-import aiohttp
 import asyncio
-import facebook
 import logging
-import re
+
+import aiohttp
+import facebook
 from aiogram.types.input_media import InputMediaPhoto
 
-import config
-import tokens
-from utils import my_bot, action_log
-from vk.vk_utils import VkPost
+from algebrach import config, tokens
+from algebrach.utils import action_log, my_bot
+from algebrach.vk import VkPost
 
 
 async def vk_check(session, vkgroup_id, date_last_post, count):
@@ -88,10 +87,10 @@ async def send_tg(session, text, disable_wp, images, gifs):
     # If it's longer than 4000 characters, sends it in chunks
     while len(text) > 4000:
         await my_bot.send_message(config.mm_chat, text[:4000], parse_mode='HTML',
-                                     disable_web_page_preview=disable_wp)
+                                  disable_web_page_preview=disable_wp)
         text = text[4000:]
     await my_bot.send_message(config.mm_chat, text, parse_mode='HTML',
-                                 disable_web_page_preview=disable_wp)
+                              disable_web_page_preview=disable_wp)
 
     # Sends all images and GIFs found in the post's attachments
     if len(images) > 0:

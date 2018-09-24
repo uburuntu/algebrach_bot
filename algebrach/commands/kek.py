@@ -3,11 +3,11 @@ import logging
 import random
 import time
 
-import config
-from utils import my_bot, user_action_log
-from models import TextResponse, ImageResponse, GifResponse, VoiceResponse, StickerResponse
-
 from aiogram import types
+
+from algebrach import config
+from algebrach.data.models import GifResponse, ImageResponse, StickerResponse, TextResponse, VoiceResponse
+from algebrach.utils import my_bot, user_action_log
 
 
 async def my_kek(message: types.Message):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3_
 import random
 
-from utils import user_action_log
+from algebrach.utils import user_action_log
 
 
 async def my_d6(message):

@@ -4,8 +4,8 @@ import io
 import requests
 from PIL import Image
 
-import tokens
-from utils import user_action_log
+from algebrach import tokens
+from algebrach.utils import user_action_log
 
 
 async def wolfram_solver(message):

@@ -4,12 +4,12 @@ import random
 import re
 
 from aiogram.utils import executor
-import pytz
+from commands import arxiv_queries, dice, kek, me, wiki, wolfram
 
-import config
-from commands import arxiv_queries, dice, me, morning_message, wiki, wolfram, kek
-from utils import dp, command_with_delay, commands_handler, action_log, user_action_log, loop, my_bot
-from vk import vk_check
+from algebrach import config
+from algebrach.commands import morning_message
+from algebrach.utils import action_log, command_with_delay, commands_handler, dp, user_action_log
+from algebrach.vk import vk_check
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',

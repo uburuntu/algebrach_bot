@@ -106,5 +106,6 @@ venv.bak/
 # IDE files
 .idea/
 
-# Database
+# Database and generated
 data.db
+generated/

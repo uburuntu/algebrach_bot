@@ -32,7 +32,7 @@ if len(sys.argv) == 2:
         mm_chat = mm_chat_debug
         mm_channel = ''
         mm_vk_group = '-152881225'
-        mm_fb_album = ''
+        mm_fb_album = '300582960439551'
         bot_token = tokens.bot_test
 
 

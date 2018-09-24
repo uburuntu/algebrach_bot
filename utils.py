@@ -1,35 +1,23 @@
 #!/usr/bin/env python3
 import re
-from io import BytesIO
 from datetime import datetime
-from html.parser import HTMLParser
+from builtins import any
 import logging
 
 import asyncio
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from PIL import Image, ImageFont, ImageDraw
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import config
 
 
 my_bot = Bot(token=config.bot_token, proxy=config.PROXY_URL, proxy_auth=config.PROXY_AUTH)
+# my_bot = Bot(token=config.bot_token)
 dp = Dispatcher(my_bot)
 
-
-class MLStripper(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.reset()
-        self.strict = False
-        self.convert_charrefs = True
-        self.fed = []
-
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
+scheduler = AsyncIOScheduler()
+scheduler.start()
 
 
 async def bot_name(bot):
@@ -37,12 +25,6 @@ async def bot_name(bot):
 
 loop = asyncio.get_event_loop()
 my_bot_name = loop.run_until_complete(bot_name(my_bot))
-
-
-def divide_text(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
 
 
 def curr_time():
@@ -85,10 +67,6 @@ def chat_info(chat):
         return chat.type + ': ' + chat.title + ' (' + str(chat.id) + ')'
 
 
-def error_log(text):
-    logging.error(text)
-
-
 def action_log(text):
     logging.info(text)
 
@@ -113,78 +91,3 @@ def command_with_delay(delay=10):
         return wrapped
 
     return my_decorator
-
-
-def strip_tags(html):
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
-
-
-def create_collage(images, tile_height=160, tile_width=240, tile_offset=0, cols=5, gap=2, padding=5,
-                   resize=True, font_size=20, font_color='#000', font_padding=10, bgcolor='#fff', write=True):
-    # Create canvas.
-    tile_count = len(images) + tile_offset
-    rows = tile_count // cols + (1 if tile_count % cols else 0)
-    imgsize = (2 * padding + tile_height * cols +
-               gap * (cols - 1),
-               2 * padding + tile_width * rows +
-               gap * (rows - 1))
-    img = Image.new('RGB', imgsize, bgcolor)
-
-    imgno = 0
-
-    for tile_file, db_id in images:
-        # Tile position.
-        pos = imgno + tile_offset
-        x = pos % cols
-        y = pos // cols
-        # Offsets.
-        xoff = padding + x * (tile_height + gap)
-        yoff = padding + y * (tile_width + gap)
-
-        tile = Image.open(BytesIO(tile_file))
-
-        # resize image if necessary!
-        if resize and tile.size != (tile_height, tile_width) and all(tile.size):
-            w_from, h_from = tile.size
-            if (w_from / float(h_from) >
-                    tile_height / float(tile_width)):
-                w_to = tile_height
-                h_to = int(w_to / float(w_from) * h_from)
-            else:
-                h_to = tile_width
-                w_to = int(h_to / float(h_from) * w_from)
-
-            try:
-                tile = tile.resize((w_to, h_to), Image.ANTIALIAS)
-            except ValueError:
-                error_log('Could not resize sticker')
-
-        # Place tile on canvas.
-        img.paste(tile, (xoff, yoff))
-
-        # Write a number on the image, if desired.
-        if write:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", font_size)
-
-            draw = ImageDraw.Draw(img)
-            txt = f'{imgno+1} [{db_id}]'
-
-            # Calculate offsets.
-            txtsize = draw.textsize(txt, font=font)
-            font_xoff = (xoff + tile_height - txtsize[0] -
-                         font_padding)
-            font_yoff = (yoff + tile_width - txtsize[1] -
-                         font_padding)
-
-            # Finally, draw the number.
-            draw.text((font_xoff, font_yoff), txt, font=font,
-                      fill=font_color)
-            del draw
-
-        imgno += 1
-
-    result = BytesIO()
-    img.save(result, format='JPEG')
-    return result.getvalue()

@@ -103,4 +103,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# IDE files
+.idea/
+
+# Database
 data.db

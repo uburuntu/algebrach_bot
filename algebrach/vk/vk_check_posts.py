@@ -30,13 +30,13 @@ async def vk_check(session, vkgroup_id, date_last_post):
                 logging.info('We have a new post in VK group!')
                 with open(config.file_location['vk_last_post'], 'w') as file:
                     file.write(str(post['date']))
-                return (await vk_prepare(session, post))
+                return await vk_prepare(session, post)
             else:
                 return 0
     except KeyError as ex:
         if (await response.json()['error']['error_code']) == 5:
             # Alert the admins about an invalid token
-            await my_bot.send_message(mm_chat_debug,
+            await my_bot.send_message(config.mm_chat_debug,
                                       'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
             action_log('KeyError exception. Most likely there\'s invalid token.')
         return 0

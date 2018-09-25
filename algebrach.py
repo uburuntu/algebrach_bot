@@ -4,10 +4,9 @@ import random
 import re
 
 from aiogram.utils import executor
-from commands import arxiv_queries, dice, kek, me, wiki, wolfram
 
 from algebrach import config
-from algebrach.commands import morning_message
+from algebrach.commands import morning_message, arxiv_queries, dice, kek, me, wiki, wolfram
 from algebrach.utils import action_log, command_with_delay, commands_handler, dp, user_action_log
 from algebrach.vk import vk_check
 

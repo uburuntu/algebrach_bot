@@ -7,16 +7,11 @@ from datetime import datetime
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from algebrach import config
 
 my_bot = Bot(token=config.bot_token, proxy=config.PROXY_URL, proxy_auth=config.PROXY_AUTH)
-# my_bot = Bot(token=config.bot_token)
 dp = Dispatcher(my_bot)
-
-scheduler = AsyncIOScheduler()
-scheduler.start()
 
 
 async def bot_name(bot):

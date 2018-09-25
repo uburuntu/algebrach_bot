@@ -5,10 +5,10 @@ import re
 from algebrach import config, tokens
 
 
-class VkPost():
-    '''
+class VkPost:
+    """
     Prepares a post for TG and FB repost
-    '''
+    """
 
     def __init__(self, session_in, post_in):
         self.post = post_in  # our new post
@@ -90,11 +90,11 @@ class VkPost():
                                                           attachments_fb)
 
     def attach_prepare(self):
-        '''
+        """
         Scans self.post['attachments'] to extract every attachment
         and prepares it for both TG and FB
         Returns prepared text parts of attachments for TG and FB
-        '''
+        """
 
         attach_tg_albums = ''
         attach_fb_albums = ''
@@ -218,19 +218,19 @@ class VkPost():
         return tg, fb
 
     def attach_naming(self, attach_string, name):
-        '''
+        """
         Attaches a name of an attachment if it's the first one of it's kind
-        '''
+        """
 
         if attach_string == '':
             attach_string = '{0}\n'.format(name)
         return attach_string
 
     def replace_wikis(self, text, raw_link=False):
-        '''
+        """
         Switches from wiki-links like '[user_id|link_text]' to HTML for TG
         If raw_link=True, switches to FB format
-        '''
+        """
 
         link_format = '{1} (https://vk.com/{0})' if raw_link else '<a href="https://vk.com/{0}">{1}</a>'
         pattern = re.compile(r'\[([^|]+)\|([^|]+)\]', re.U)

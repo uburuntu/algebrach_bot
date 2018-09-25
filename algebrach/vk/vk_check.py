@@ -8,15 +8,15 @@ from aiogram.types.input_media import InputMediaPhoto
 
 from algebrach import config, tokens
 from algebrach.utils import action_log, my_bot
-from algebrach.vk import VkPost
+from algebrach.vk.vk_utils import VkPost
 
 
 async def vk_check(session, vkgroup_id, date_last_post, count):
-    '''
+    """
     Checks for a new post
     If new post is found, calls VkPost() class to extract data for TG and FB
     Returns all required types of data
-    '''
+    """
 
     disable_wp = True
     # count parameter is useful for /vk_last command
@@ -73,16 +73,16 @@ async def vk_check(session, vkgroup_id, date_last_post, count):
     except KeyError as ex:
         if (await response.json()['error']['error_code']) == 5:
             # Alert the admins about an invalid token
-            await my_bot.send_message(mm_chat_debug,
+            await my_bot.send_message(config.mm_chat_debug,
                                       'Что-то не так с токеном у ВК! Проверка новых постов приостановлена.\nФиксики приде, порядок наведе!')
             action_log('KeyError exception. Most likely there\'s invalid token.')
         return 0
 
 
 async def send_tg(session, text, disable_wp, images, gifs):
-    '''
+    """
     Sends all gathered data to TG
-    '''
+    """
 
     # Sends the text portion of the post
     # If it's longer than 4000 characters, sends it in chunks
@@ -104,9 +104,9 @@ async def send_tg(session, text, disable_wp, images, gifs):
 
 
 async def send_fb(session, text, images, gifs, link):
-    '''
+    """
     Sends all gathered data to FB
-    '''
+    """
 
     api = facebook.GraphAPI(tokens.fb)
 
@@ -140,9 +140,9 @@ async def send_fb(session, text, images, gifs, link):
 
 
 async def vk_main(dp):
-    '''
+    """
     Performs checks and resends final post to TG and FB on an update
-    '''
+    """
 
     # Tries to get last date from a file
     # TODO: export to a DB
@@ -157,7 +157,7 @@ async def vk_main(dp):
         # Gets the last post
         post_new = await vk_check(session, config.mm_vk_group, date_last_post, 1)
         # If it returns default then quit vk_main()
-        if post_new == None:
+        if post_new is None:
             return
 
         # Else, gets data for different types of bot send and reposts it to TG and FB
@@ -171,9 +171,9 @@ async def vk_main(dp):
 
 
 async def schedule_vk(dp):
-    '''
+    """
     Checks for new VK post every minute
-    '''
+    """
 
     while True:
         await vk_main(dp)

@@ -37,7 +37,6 @@ async def my_wiki(message):
         await message.reply('<b>{0}.</b>\n{1}\n{2}'.format(wiki_title, wiki_fact, wiki_url), parse_mode='HTML')
     except wikipedia.exceptions.DisambiguationError as e:
         wiki_list = '\n'.join(map(str, e.options))
-        wiki_fact = ''
         await message.reply('Пожалуйста, уточни запрос.\n' \
                             'Выбери, что из перечисленного имелось в виду, и вызови /wiki ещё раз.\n{0}'.format(
             wiki_list))

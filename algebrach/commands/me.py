@@ -10,12 +10,12 @@ from algebrach.utils import user_action_log
 # TODO: отрефакторить говнокод
 async def me_message(message):
     # В ЛС бот не может удалять сообщения пользователя
-    '''
+    """
     try:
         my_bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     except Exception:
         logging.exception("message")
-    '''
+    """
     # Если у пользователя есть юзернэйм, то берём его как your_name
     if message.from_user.username is not None:
         your_name = '[@{}](tg://user?id={})'.format(message.from_user.username, message.from_user.id)
